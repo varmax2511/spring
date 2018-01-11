@@ -1,0 +1,126 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Gradle + Spring MVC</title>
+
+<spring:url value="/resources/core/css/hello.css" var="coreCss" />
+<spring:url value="/resources/core/css/bootstrap.min.css"
+	var="bootstrapCss" />
+<link href="${bootstrapCss}" rel="stylesheet" />
+<link href="${coreCss}" rel="stylesheet" />
+</head>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Student Registration System</a>
+		</div>
+	</div>
+</nav>
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>${title}</h1>
+		<p>
+			<c:if test="${not empty msg}">
+				Hello ${msg}
+			</c:if>
+
+			<c:if test="${empty msg}">
+				Welcome Welcome!
+			</c:if>
+		<div class="row">
+			<div class="col-md-2">
+				<p>
+					<a class="btn btn-primary btn-lg" href="register" role="button">Register</a>
+				</p>
+			</div>
+			<div class="col-md-2">
+				<p>
+					<a class="btn btn-primary btn-lg" href="update" role="button">Update</a>
+				</p>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+</head>
+
+
+
+<div>
+
+	<form:form id="regForm" modelAttribute="student"
+		action="persistStudent" method="post">
+
+		<table align="center">
+			<tr>
+				<td><form:label path="id">Id</form:label></td>
+				<td><form:input path="id" name="id" id="id" /></td>
+			</tr>
+
+			<tr>
+				<td><form:label path="name">Name</form:label></td>
+				<td><form:input path="name" name="name" id="name" /></td>
+			</tr>
+
+			<tr>
+				<td><form:label path="age">Age</form:label></td>
+				<td><form:input path="age" name="age" id="age" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="university">University</form:label></td>
+				<td><form:input path="university" name="university"
+						id="university" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="age">Course</form:label></td>
+				<td><form:input path="course" name="course" id="course" /></td>
+			</tr>
+
+			<tr>
+				<td></td>
+				<td><form:button id="register" name="register">Register</form:button>
+				</td>
+
+			</tr>
+
+			<tr></tr>
+
+			<tr>
+
+				<td></td>
+
+				<td><a href="index.jsp">Home</a></td>
+
+			</tr>
+
+		</table>
+
+	</form:form>
+
+
+
+</div>
+
+<hr>
+<footer>
+	<p>&copy; Demo</p>
+</footer>
+
+
+<spring:url value="/resources/core/css/hello.js" var="coreJs" />
+<spring:url value="/resources/core/css/bootstrap.min.js"
+	var="bootstrapJs" />
+
+<script src="${coreJs}"></script>
+<script src="${bootstrapJs}"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+</body>
+</html>
