@@ -14,9 +14,12 @@ import javax.xml.transform.TransformerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -75,36 +78,6 @@ public class WelcomeController {
     model.put("title", helloWorldService.getTitle(""));
     model.put("msg", helloWorldService.getDesc());
     return "register";
-  }
-
-  @RequestMapping(value = "/update", method = RequestMethod.GET)
-  public String update(Map<String, Object> model,
-      @ModelAttribute("studentId") Integer studentId) {
-
-    logger.info("update() is executed - $id {}");
-    model.put("title", helloWorldService.getTitle(""));
-    model.put("msg", helloWorldService.getDesc());
-
-    // check if student id is available in the model
-    if (studentId == null) {
-      return "update";
-    }
-
-    logger.info("update() is executed - $id {}",
-        String.valueOf(studentId));
-
-    // fetch student object from repo
-    Iterable<Student> itr = repository
-        .findAll(Arrays.asList(String.valueOf(studentId)));
-
-    if (itr == null || itr.iterator().hasNext() == false) {
-      return "error";
-    }
-
-    final Student student = itr.iterator().next();
-    model.put("currentStudent", student);
-
-    return "update";
   }
 
   @RequestMapping(value = "/persistStudent", method = RequestMethod.POST)
@@ -179,4 +152,39 @@ public class WelcomeController {
 
   }
 
+ /* @RequestMapping(value = "/getUpdateStudent/{id}", method = RequestMethod.GET)
+  public ResponseEntity<Student> getUpdateStudent(@PathVariable("id") String studentId) {
+
+    logger.info("update() is executed - $id {}");
+   
+    // fetch student object from repo
+    Iterable<Student> itr = repository
+        .findAll(Arrays.asList(String.valueOf(studentId)));
+
+    
+    return new ResponseEntity<Student>(itr.iterator().next(), HttpStatus.OK);
+  }*/
+  
+  @RequestMapping(value = "/update", method = RequestMethod.GET)
+  public String update(Map<String, Object> model) {
+
+    logger.info("update() is executed");
+    model.put("title", helloWorldService.getTitle(""));
+    model.put("msg", helloWorldService.getDesc());
+
+    return "update";
+  }
+  
+  @PostMapping(value = "/getUpdateStudent")
+  public String getUpdateStudent(@ModelAttribute("id") int id) {
+
+    logger.info("update() is executed - $id {}");
+   
+    // fetch student object from repo
+    Iterable<Student> itr = repository
+        .findAll(Arrays.asList(String.valueOf(id)));
+
+    return "index";
+  }
+  
 }

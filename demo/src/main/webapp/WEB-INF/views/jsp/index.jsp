@@ -1,7 +1,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <title>Gradle + Spring MVC</title>
 
@@ -17,30 +18,22 @@
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">Student Registration System</a>
 		</div>
+		<div class="col-md-6">
+			<form action="logout" method="post">
+				<input type="submit" value="Sign Out" />
+			</form>
+		</div>
 	</div>
 </nav>
 
 <div class="jumbotron">
 	<div class="container">
-		<h1>${title}</h1>
-		<p>
-			<c:if test="${not empty msg}">
-				Hello ${msg}
-			</c:if>
-
-			<c:if test="${empty msg}">
-				Welcome Welcome!
-			</c:if>
 		<div class="row">
 			<div class="col-md-2">
-				<p>
-					<a class="btn btn-primary btn-lg" href="register" role="button">Register</a>
-				</p>
+					<a class="btn btn-primary" href="register" role="button">Register</a>
 			</div>
 			<div class="col-md-2">
-				<p>
-					<a class="btn btn-primary btn-lg" href="update" role="button">Update</a>
-				</p>
+					<a class="btn btn-primary" href="update" role="button">Update</a>
 			</div>
 		</div>
 
@@ -49,30 +42,31 @@
 
 <div class="container">
 	<c:if test="${not empty students}">
+		<div>
+			<h3>Registered Students</h3>
+		</div>
 		<c:forEach items="${students}" var="student">
-			<div>
-				<h2>Registered Students</h2>
-			</div>
+
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<p>Name</p>
 					<p>
 						<a class="btn btn-default" href="#" role="button">${student.name}</a>
 					</p>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<p>Age</p>
 					<p>
 						<a class="btn btn-default" href="#" role="button">${student.age}</a>
 					</p>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<p>University</p>
 					<p>
 						<a class="btn btn-default" href="#" role="button">${student.university}</a>
 					</p>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<p>Course</p>
 					<p>
 						<a class="btn btn-default" href="#" role="button">${student.course}</a>

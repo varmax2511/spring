@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
 <title>Gradle + Spring MVC</title>
 
@@ -39,22 +39,59 @@
 </div>
 </head>
 
-
-
 <div>
-
-    <form:form id="regForm" modelAttribute="id" action="getUpdateStudent"
+	<form:form id="regForm" modelAttribute="student" action="updateStudent"
 		method="post">
-		<form:label path="id">Enter ID of the student to be updated</form:label>
-		<form:input path="id" name="id" id="id" />
-	</form:form> 
-	
-	<!--<form action="#" th:action="@{/getUpdateStudent}" th:object="${id}" method="post">
-    	<p>Id: <input type="text" th:field="*{id}" /></p>
-    </form> -->
 
+		<table align="center">
+			<tr>
+				<td><form:label path="id">Id</form:label></td>
+				<td><form:input path="id" name="id" id="id" readonly="true"
+						value="${currentStudent.id} }" /></td>
+			</tr>
 
+			<tr>
+				<td><form:label path="name">Name</form:label></td>
+				<td><form:input path="name" name="name" id="name"
+						readonly="true" value="${currentStudent.name}" /></td>
+			</tr>
+
+			<tr>
+				<td><form:label path="age">Age</form:label></td>
+				<td><form:input path="age" name="age" id="age" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="university">University</form:label></td>
+				<td><form:input path="university" name="university"
+						id="university" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="age">Course</form:label></td>
+				<td><form:input path="course" name="course" id="course" /></td>
+			</tr>
+
+			<tr>
+				<td></td>
+				<td><form:button id="update" name="update">Update</form:button>
+				</td>
+
+			</tr>
+
+			<tr></tr>
+
+			<tr>
+
+				<td></td>
+
+				<td><a href="index.jsp">Home</a></td>
+
+			</tr>
+
+		</table>
+
+	</form:form>
 </div>
+
 
 <hr>
 <footer>

@@ -5273,8 +5273,8 @@ a.badge:focus, a.badge:hover {
 }
 
 .jumbotron {
-	padding: 30px 15px;
-	margin-bottom: 30px;
+	padding: 10px 15px;
+	margin-bottom: 10px;
 	color: inherit;
 	background-color: #eee
 }
