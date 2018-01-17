@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+/*package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +19,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .anyRequest().authenticated().and().formLogin().loginPage("/login")
         .permitAll().and().logout().permitAll();
 
-    /*
+    
      * http.authorizeRequests().anyRequest().authenticated().and().formLogin()
      * .loginPage("/login").permitAll().and().logout().permitAll();
-     */
+     
   }
 
   @Autowired
@@ -32,4 +32,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .roles("USER");
   }
 
-}
+}*/
