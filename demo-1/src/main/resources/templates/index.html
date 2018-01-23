@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Demo</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width" />
+<base href="/" />
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	// check user info
+	$.get("/user", function(data) {
+		$("#user").html(data.userAuthentication.details.name);
+		$(".unauthenticated").hide()
+		$(".authenticated").show()
+	});
+
+	// logout script
+	var logout = function() {
+		$.post("/logout", function() {
+			$("#user").html('');
+			$(".unauthenticated").show();
+			$(".authenticated").hide();
+		})
+		return true;
+	}
+</script>
+</head>
+
+
+<div>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand">Student Registration System</a>
+			</div>
+			<div class="container unauthenticated">
+				<div class="col-md-6">
+					<a class="btn btn-default" href="/login" role="button">With
+						Github</a>
+				</div>
+			</div>
+			<div class="container authenticated" style="display: none">
+				<div class="row">
+					<div class="col-md-6">
+						<a class="btn btn-default" id="user" role="button"></a>
+						<button onClick="logout()" class="btn btn-primary">Logout</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<p />
+	<p />
+	<p />
+
+	<div class="jumbotron">
+		<div class="container">
+			<p>This is a demo application to try out Spring and OAuth2</p>
+			<!-- 
+			<div class="row">
+				<div class="col-md-2">
+					<a class="btn btn-primary" href="register" role="button">Register</a>
+				</div>
+				<div class="col-md-2">
+					<a class="btn btn-primary" href="update" role="button">Update</a>
+				</div>
+			</div>
+            -->
+		</div>
+	</div>
+
+
+	<div class="container">
+		<table class="table">
+			<tr class="thead">
+				<th>ID</th>
+				<th>Name</th>
+				<th>Age</th>
+				<th>University</th>
+				<th>Course</th>
+			</tr>
+			<tr th:each="student : ${students}">
+				<td th:text="${student.id}"></td>
+				<td th:text="${student.name}"></td>
+				<td th:text="${student.age}"></td>
+				<td th:text="${student.university}"></td>
+				<td th:text="${student.course}"></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<hr />
+<footer>
+	<p>&copy; OneDataShare</p>
+</footer>
+<body>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Demo</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width" />
+<base href="/" />
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript">
+    $.get("/user", function(data) {
+        $("#user").html(data.userAuthentication.details.name);
+        $(".unauthenticated").hide()
+        $(".authenticated").show()
+    });
+</script>
+
+<div>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand">Student Registration System</a>
+			</div>
+		</div>
+	</nav>
+	<p />
+	<p />
+	<p />
+
+	<div class="jumbotron">
+		<div class="container">
+			<p>This is a demo application to try out Spring and OAuth2</p>
+			<!-- 
+			<div class="row">
+				<div class="col-md-2">
+					<a class="btn btn-primary" href="register" role="button">Register</a>
+				</div>
+				<div class="col-md-2">
+					<a class="btn btn-primary" href="update" role="button">Update</a>
+				</div>
+			</div>
+            -->
+		</div>
+	</div>
+
+
+	<div class="container">
+
+		<div class="container unauthenticated">
+			<a href="/login">With Github</a>
+		</div>
+		<div class="container authenticated" style="display: none">
+			Logged in as: <span id="user"></span>
+		</div>
+
+	</div>
+
+</div>
+<hr />
+<footer>
+	<p>&copy; OneDataShare</p>
+</footer>
+<body>
+</body>
+</html>
