@@ -1,105 +1,88 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Gradle + Spring MVC</title>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Demo</title>
-    <meta name="description" content=""/>
-    <meta name="viewport" content="width=device-width"/>
-    <base href="/"/>
-    <!--<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>-->
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <spring:url value="/resources/core/css/hello.css" var="coreCss"/>
-    <spring:url value="/resources/core/css/bootstrap.min.css"
-                var="bootstrapCss"/>
-    <link href="${bootstrapCss}" rel="stylesheet"/>
-    <link href="${coreCss}" rel="stylesheet"/>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Demo</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width" />
+<base href="/" />
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	// check user info
+	$.get("/user", function(data) {
+		$("#user").html(data.userAuthentication.details.name);
+		$(".unauthenticated").hide()
+		$(".authenticated").show()
+	});
+
+	// logout script
+	var logout = function() {
+		$.post("/logout", function() {
+			$("#user").html('');
+			$(".unauthenticated").show();
+			$(".authenticated").hide();
+		})
+		return true;
+	}
+</script>
 </head>
 
-<script type="text/javascript">
-    $.get("/user", function (data) {
-        $("#user").html(data.userAuthentication.details.name);
-        $(".unauthenticated").hide()
-        $(".authenticated").show()
-    });
-</script>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Student Registration System</a>
-        </div>
-    </div>
-</nav>
+<div>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand">Student Registration System</a>
+			</div>
+			<div class="container unauthenticated">
+				<div class="col-md-6">
+					<a class="btn btn-default" href="/login/github" role="button">With
+						Github</a> 
+						<a class="btn btn-default" href="/login/google"
+						role="button">With Google</a>
+				</div>
+			</div>
+			<div class="container authenticated" style="display: none">
+				<div class="row">
+					<div class="col-md-6">
+						<a class="btn btn-default" id="user" role="button"></a>
+						<a class="btn btn-default" href="/index" role="button">Home</a>
+						<button onClick="logout()" class="btn btn-primary">Logout</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<p />
+	<p />
+	<p />
 
-<div class="container unauthenticated">
-        <a href="/login">With Github</a>
+	<div class="jumbotron">
+		<div class="container">
+			<p>This is a demo application to try out Spring and OAuth2</p>
+			<!-- 
+			<div class="row">
+				<div class="col-md-2">
+					<a class="btn btn-primary" href="register" role="button">Register</a>
+				</div>
+				<div class="col-md-2">
+					<a class="btn btn-primary" href="update" role="button">Update</a>
+				</div>
+			</div>
+            -->
+		</div>
+	</div>
 </div>
-<div class="container authenticated" style="display:none">
-    <div class="jumbotron">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2">
-                    <a class="btn btn-primary" href="register" role="button">Register</a>
-                </div>
-                <div class="col-md-2">
-                    <a class="btn btn-primary" href="update" role="button">Update</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="container">
-        <c:if test="${not empty students}">
-            <div>
-                <h3>Registered Students</h3>
-            </div>
-            <c:forEach items="${students}" var="student">
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>Name</p>
-                        <p>
-                            <a class="btn btn-default" href="#" role="button">${student.name}</a>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>Age</p>
-                        <p>
-                            <a class="btn btn-default" href="#" role="button">${student.age}</a>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>University</p>
-                        <p>
-                            <a class="btn btn-default" href="#" role="button">${student.university}</a>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>Course</p>
-                        <p>
-                            <a class="btn btn-default" href="#" role="button">${student.course}</a>
-                        </p>
-                    </div>
-                </div>
-            </c:forEach>
-        </c:if>
-    </div>
-</div>
-
-<hr>
+<hr />
 <footer>
-    <p>&copy; Demo</p>
+	<p>&copy; OneDataShare</p>
 </footer>
-
-
-<script
-        src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
-<body></body>
-
-
+<body>
+</body>
 </html>

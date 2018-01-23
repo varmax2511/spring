@@ -60,6 +60,16 @@ public class WelcomeController {
    * @return
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
+  public String home(Map<String, Object> model) {
+    logger.info("index() is executed");
+
+    model.put("title", helloWorldService.getTitle(""));
+    model.put("msg", helloWorldService.getDesc());
+
+    return "home";
+  }
+  
+  @RequestMapping(value = "/index", method = RequestMethod.GET)
   public String index(Map<String, Object> model) {
     logger.info("index() is executed");
 
