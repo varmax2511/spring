@@ -5,6 +5,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 
+/**
+ * 
+ * @author varunjai
+ *
+ */
 @SpringBootApplication
 public class DemoApplication {
 
