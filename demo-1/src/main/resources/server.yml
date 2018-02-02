@@ -1,0 +1,12 @@
+server:
+  port: 9999
+  context-path: /server
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      client-id: demo-1
+      client-secret: demosecret
+      scope: read,write
+      auto-approve-scopes: '.*'

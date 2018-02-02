@@ -19,10 +19,9 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CompositeFilter;
 
@@ -49,10 +48,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * .loginPage("/login").permitAll().and().logout().permitAll();
      */
 
+    /*
+     * http.antMatcher("/**").authorizeRequests() .antMatchers("/", "/login**",
+     * "/webjars/**").permitAll().anyRequest()
+     * .authenticated().and().logout().logoutSuccessUrl("/").permitAll().and()
+     * .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+     */
+
     http.antMatcher("/**").authorizeRequests()
-        .antMatchers("/", "/login", "/webjars/**").permitAll().anyRequest()
+        .antMatchers("/", "/login**", "/webjars/**").permitAll().anyRequest()
         .authenticated().and().logout().logoutSuccessUrl("/").permitAll().and()
-        .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);;
+        .exceptionHandling()
+        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
+        .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
   }
 
   /**
@@ -67,49 +75,51 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     filters.add(ssoFilter(google(), googleResource(), "/login/google"));
     filters.add(ssoFilter(github(), githubResource(), "/login/github"));
+    filters.add(ssoFilter(one(), oneResource(), "/login/one"));
+    // filters.add(ssoFilter(google(), "/login/google"));
+    // filters.add(ssoFilter(github(), "/login/github"));
     filter.setFilters(filters);
     return filter;
-    
+
     /*
      * Github Filter
      */
     /**
-    final OAuth2ClientAuthenticationProcessingFilter githubFilter = new OAuth2ClientAuthenticationProcessingFilter(
-        "/login/github");
-    final OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github(),
-        oauth2ClientContext);
-
-    githubFilter.setRestTemplate(githubTemplate);
-    final UserInfoTokenServices githubTokenServices = new UserInfoTokenServices(
-        githubResource().getUserInfoUri(), githubResource().getClientId());
-    githubTokenServices.setRestTemplate(githubTemplate);
-    githubFilter.setTokenServices(githubTokenServices);
-
-    filters.add(githubFilter);
-    */
+     * final OAuth2ClientAuthenticationProcessingFilter githubFilter = new
+     * OAuth2ClientAuthenticationProcessingFilter( "/login/github"); final
+     * OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github(),
+     * oauth2ClientContext);
+     * 
+     * githubFilter.setRestTemplate(githubTemplate); final UserInfoTokenServices
+     * githubTokenServices = new UserInfoTokenServices(
+     * githubResource().getUserInfoUri(), githubResource().getClientId());
+     * githubTokenServices.setRestTemplate(githubTemplate);
+     * githubFilter.setTokenServices(githubTokenServices);
+     * 
+     * filters.add(githubFilter);
+     */
 
     /*
      * Google Filter
      */
     /**
-    OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter(
-        "/login/google");
-    final OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(),
-        oauth2ClientContext);
-    googleFilter.setRestTemplate(googleTemplate);
-    final UserInfoTokenServices googleTokenServices = new UserInfoTokenServices(
-        googleResource().getUserInfoUri(), googleResource().getClientId());
-    googleTokenServices.setRestTemplate(googleTemplate);
-    googleFilter.setTokenServices(googleTokenServices);
-
-    filters.add(googleFilter);
-
-    filter.setFilters(filters);
-    return filter;
-    */
+     * OAuth2ClientAuthenticationProcessingFilter googleFilter = new
+     * OAuth2ClientAuthenticationProcessingFilter( "/login/google"); final
+     * OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(),
+     * oauth2ClientContext); googleFilter.setRestTemplate(googleTemplate); final
+     * UserInfoTokenServices googleTokenServices = new UserInfoTokenServices(
+     * googleResource().getUserInfoUri(), googleResource().getClientId());
+     * googleTokenServices.setRestTemplate(googleTemplate);
+     * googleFilter.setTokenServices(googleTokenServices);
+     * 
+     * filters.add(googleFilter);
+     * 
+     * filter.setFilters(filters); return filter;
+     */
   }
 
-  private Filter ssoFilter(AuthorizationCodeResourceDetails client, ResourceServerProperties resource, String path) {
+  private Filter ssoFilter(AuthorizationCodeResourceDetails client,
+      ResourceServerProperties resource, String path) {
 
     OAuth2ClientAuthenticationProcessingFilter clientFilter = new OAuth2ClientAuthenticationProcessingFilter(
         path);
@@ -120,9 +130,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         resource.getUserInfoUri(), resource.getClientId());
     clientTokenServices.setRestTemplate(clientTemplate);
     clientFilter.setTokenServices(clientTokenServices);
-    
+
     return clientFilter;
   }
+
+  /*
+   * private Filter ssoFilter(ClientResources client, String path) {
+   * 
+   * OAuth2ClientAuthenticationProcessingFilter clientFilter = new
+   * OAuth2ClientAuthenticationProcessingFilter( path); final OAuth2RestTemplate
+   * clientTemplate = new OAuth2RestTemplate(client.getClient(),
+   * oauth2ClientContext); clientFilter.setRestTemplate(clientTemplate); final
+   * UserInfoTokenServices clientTokenServices = new UserInfoTokenServices(
+   * client.getResource().getUserInfoUri(), client.getClient().getClientId());
+   * clientTokenServices.setRestTemplate(clientTemplate);
+   * clientFilter.setTokenServices(clientTokenServices);
+   * 
+   * return clientFilter; }
+   */
 
   @Bean
   @ConfigurationProperties("github.client")
@@ -147,7 +172,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   public ResourceServerProperties googleResource() {
     return new ResourceServerProperties();
   }
+  
+  @Bean
+  @ConfigurationProperties("one.client")
+  public AuthorizationCodeResourceDetails one() {
+    return new AuthorizationCodeResourceDetails();
+  }
 
+  @Bean
+  @ConfigurationProperties("one.resource")
+  public ResourceServerProperties oneResource() {
+    return new ResourceServerProperties();
+  }
+
+  /*
+   * @Bean
+   * 
+   * @ConfigurationProperties("github") public ClientResources github() { return
+   * new ClientResources(); }
+   * 
+   * @Bean
+   * 
+   * @ConfigurationProperties("google") public ClientResources google() { return
+   * new ClientResources(); }
+   */
   @Bean
   public FilterRegistrationBean oauth2ClientFilterRegistration(
       OAuth2ClientContextFilter oauth2ClientContextFilter) {
@@ -157,4 +205,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     registration.setOrder(-100);
     return registration;
   }
+  
+
 }
